@@ -13,7 +13,14 @@
 		B6A9B6BD2649B737009C4D4F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6A9B6BC2649B737009C4D4F /* Preview Assets.xcassets */; };
 		B6A9B6C82649B910009C4D4F /* LandingPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A9B6C72649B910009C4D4F /* LandingPageViewModel.swift */; };
 		B6A9B6CA2649B93F009C4D4F /* WorkItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A9B6C92649B93F009C4D4F /* WorkItemModel.swift */; };
-		B6A9B6CC2649BA54009C4D4F /* AddWorkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A9B6CB2649BA54009C4D4F /* AddWorkView.swift */; };
+		B6A9B6CC2649BA54009C4D4F /* AddEditWorkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A9B6CB2649BA54009C4D4F /* AddEditWorkView.swift */; };
+		B6D80ACC264CD82800AE8B4E /* MultiSelectListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D80ACB264CD82800AE8B4E /* MultiSelectListView.swift */; };
+		B6D80ACE264EEFE200AE8B4E /* LocationSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D80ACD264EEFE100AE8B4E /* LocationSelectionView.swift */; };
+		B6D80AD0264EF0B200AE8B4E /* AddWorkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D80ACF264EF0B200AE8B4E /* AddWorkViewModel.swift */; };
+		B6D80AD226517AEC00AE8B4E /* WorkItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D80AD126517AEC00AE8B4E /* WorkItemView.swift */; };
+		B6D80AD42652B2C800AE8B4E /* WorkItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D80AD32652B2C800AE8B4E /* WorkItemViewModel.swift */; };
+		B6D80AD82652FD1300AE8B4E /* WorkCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D80AD72652FD1300AE8B4E /* WorkCardView.swift */; };
+		B6D80ADB2652FE4200AE8B4E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D80ADA2652FE4200AE8B4E /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +32,14 @@
 		B6A9B6BE2649B737009C4D4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B6A9B6C72649B910009C4D4F /* LandingPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingPageViewModel.swift; sourceTree = "<group>"; };
 		B6A9B6C92649B93F009C4D4F /* WorkItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkItemModel.swift; sourceTree = "<group>"; };
-		B6A9B6CB2649BA54009C4D4F /* AddWorkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWorkView.swift; sourceTree = "<group>"; };
+		B6A9B6CB2649BA54009C4D4F /* AddEditWorkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditWorkView.swift; sourceTree = "<group>"; };
+		B6D80ACB264CD82800AE8B4E /* MultiSelectListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiSelectListView.swift; sourceTree = "<group>"; };
+		B6D80ACD264EEFE100AE8B4E /* LocationSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSelectionView.swift; sourceTree = "<group>"; };
+		B6D80ACF264EF0B200AE8B4E /* AddWorkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWorkViewModel.swift; sourceTree = "<group>"; };
+		B6D80AD126517AEC00AE8B4E /* WorkItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkItemView.swift; sourceTree = "<group>"; };
+		B6D80AD32652B2C800AE8B4E /* WorkItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkItemViewModel.swift; sourceTree = "<group>"; };
+		B6D80AD72652FD1300AE8B4E /* WorkCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkCardView.swift; sourceTree = "<group>"; };
+		B6D80ADA2652FE4200AE8B4E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +72,7 @@
 		B6A9B6B42649B733009C4D4F /* Homehut */ = {
 			isa = PBXGroup;
 			children = (
+				B6D80AD92652FE2F00AE8B4E /* Repository */,
 				B6A9B6C62649B808009C4D4F /* Models */,
 				B6A9B6C52649B801009C4D4F /* ViewModels */,
 				B6A9B6C42649B7F8009C4D4F /* Views */,
@@ -81,7 +96,11 @@
 			isa = PBXGroup;
 			children = (
 				B6A9B6B72649B733009C4D4F /* LandingPageView.swift */,
-				B6A9B6CB2649BA54009C4D4F /* AddWorkView.swift */,
+				B6A9B6CB2649BA54009C4D4F /* AddEditWorkView.swift */,
+				B6D80ACB264CD82800AE8B4E /* MultiSelectListView.swift */,
+				B6D80ACD264EEFE100AE8B4E /* LocationSelectionView.swift */,
+				B6D80AD126517AEC00AE8B4E /* WorkItemView.swift */,
+				B6D80AD72652FD1300AE8B4E /* WorkCardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -90,6 +109,8 @@
 			isa = PBXGroup;
 			children = (
 				B6A9B6C72649B910009C4D4F /* LandingPageViewModel.swift */,
+				B6D80ACF264EF0B200AE8B4E /* AddWorkViewModel.swift */,
+				B6D80AD32652B2C800AE8B4E /* WorkItemViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -100,6 +121,14 @@
 				B6A9B6C92649B93F009C4D4F /* WorkItemModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		B6D80AD92652FE2F00AE8B4E /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				B6D80ADA2652FE4200AE8B4E /* Constants.swift */,
+			);
+			path = Repository;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -171,11 +200,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6D80ACC264CD82800AE8B4E /* MultiSelectListView.swift in Sources */,
+				B6D80AD0264EF0B200AE8B4E /* AddWorkViewModel.swift in Sources */,
+				B6D80AD226517AEC00AE8B4E /* WorkItemView.swift in Sources */,
 				B6A9B6C82649B910009C4D4F /* LandingPageViewModel.swift in Sources */,
-				B6A9B6CC2649BA54009C4D4F /* AddWorkView.swift in Sources */,
+				B6A9B6CC2649BA54009C4D4F /* AddEditWorkView.swift in Sources */,
 				B6A9B6CA2649B93F009C4D4F /* WorkItemModel.swift in Sources */,
+				B6D80AD82652FD1300AE8B4E /* WorkCardView.swift in Sources */,
+				B6D80AD42652B2C800AE8B4E /* WorkItemViewModel.swift in Sources */,
 				B6A9B6B82649B733009C4D4F /* LandingPageView.swift in Sources */,
 				B6A9B6B62649B733009C4D4F /* HomehutApp.swift in Sources */,
+				B6D80ACE264EEFE200AE8B4E /* LocationSelectionView.swift in Sources */,
+				B6D80ADB2652FE4200AE8B4E /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

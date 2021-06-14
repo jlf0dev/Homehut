@@ -6,31 +6,56 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct WorkItemModel : Identifiable {
-    var id: String = UUID().uuidString
+    let id: String = UUID().uuidString
     
-    let title: String
-    let startDate: Date
-//    let endDate: Date?
-//    let category: String
-//    let recurringMode: String?
+    var title: String
+    var category: CategoryType
+    var dueDate: Date
+    var frequency: FrequencyType
 //    let tools: [String]?
-//    let equipment: [String: Int]?
-    let location: String? // Should be array
-//    let notes: String?
+//    let materials: [String: Int]?
+    var location: [Location]? // TODO: Should be array
+    var notes: String?
 //    let pictures:
     
-    
-    var startDateString: String { // TODO: formatters not cheap, change this
-            let formatter = DateFormatter()
-            formatter.dateFormat = "EEEE, dd 'of' MMMM"
-            return formatter.string(from: startDate)
+    init(title: String = "", category: CategoryType = .general, dueDate: Date = Date(), frequency: FrequencyType = .oneTime, location: [Location]? = nil, notes: String? = nil) {
+        self.title = title
+        self.category = category
+        self.dueDate = dueDate
+        self.frequency = frequency
+        self.location = location
+        self.notes = notes
     }
     
-    var endDateString: String {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "EEEE, dd 'of' MMMM"
-            return formatter.string(from: startDate)
+}
+
+struct Location: Identifiable {
+        let id = UUID().uuidString
+        var name: String
+    
+    init(_ name: String){
+        self.name = name
     }
 }
+
+public enum CategoryType: String, Codable {
+    case general,
+         clean,
+         repair
+}
+
+enum FrequencyType: String, Codable, CaseIterable, Identifiable {
+    var id: FrequencyType {self}
+    
+    case oneTime = "One Time",
+         weekly = "Weekly",
+         monthly = "Monthly",
+         yearly = "Yearly"
+}
+
+
+
+

@@ -9,21 +9,21 @@ import Foundation
 
 class AddWorkViewModel: ObservableObject {
         
-    var CurrentLocation: Location {
-        return locationData[3]
-    }
+//    var CurrentLocation: Location {
+//        return locationData[3]
+//    }
+//    
+//    var LocationData: [Location] {
+//        locationData
+//    }
     
-    var LocationData: [Location] {
-        locationData
-    }
-    
-    let locationData = [
-        Location("Upstairs"),
-        Location("Downstairs"),
-        Location("Outside"),
-        Location("Inside"),
-        Location("Kitchen"),
-        Location("Bathroom"),
-    ]
+//    let locationData = [
+//        Location("Upstairs"),
+//        Location("Downstairs"),
+//        Location("Outside"),
+//        Location("Inside"),
+//        Location("Kitchen"),
+//        Location("Bathroom"),
+//    ]
     
 }

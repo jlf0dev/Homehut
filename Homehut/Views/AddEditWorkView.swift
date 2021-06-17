@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct AddEditWorkView: View {
-    
+    @Environment(\.managedObjectContext) private var viewContext
     private var content: AnyView
     
-    init(_ model: Binding<WorkItemModel>? = nil ) {
+    init(_ model: WorkItem? = nil ) {
         UITextView.appearance().backgroundColor = .clear
+        
         if let model = model {
             self.content = AnyView(EditWorkView(workItem: model))
         } else {
@@ -22,21 +23,23 @@ struct AddEditWorkView: View {
     
     var body: some View {
         content
+            .environment(\.managedObjectContext, self.viewContext)
     }
     
     private struct AddWorkView: View {
-        @State private var workItem = WorkItemModel()
-        
+        @Environment(\.managedObjectContext) private var viewContext
+
         var body: some View {
-            EditWorkView (workItem: $workItem)
+            EditWorkView(workItem: WorkItem(context: viewContext))
         }
     }
     
     private struct EditWorkView: View {
-        @ObservedObject private var viewModel = AddWorkViewModel()
-        @Binding var workItem: WorkItemModel
+        @Environment(\.managedObjectContext) private var viewContext
+        @ObservedObject var workItem: WorkItem
         
         @State private var showingLocationSheet = false
+        
 
         var body: some View {
             ZStack{
@@ -60,10 +63,10 @@ struct AddEditWorkView: View {
                                 Text("Title")
                                     .font(.title2)
                                     .foregroundColor(Color("blackColor"))
-                                
                                 TextField("What do you need to do?", text: $workItem.title)
                                     .padding(8)
                                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
+                                
                             }
                             .padding(.vertical)
                             
@@ -90,6 +93,7 @@ struct AddEditWorkView: View {
                                                 .background(Color.clear)
                                                 .accentColor(Color("blackColor"))
                                                 .opacity(0.1)
+                                            
 
                                         }
                                         
@@ -123,19 +127,18 @@ struct AddEditWorkView: View {
                             
                             
                             VStack(alignment: .leading){
-                                Text("Location")
+                                Text("Locations")
                                     .font(.title2)
                                     .foregroundColor(Color("blackColor"))
                                 HStack(){
                                     
                                     
-//                                    Button{
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 10)
                                                 .fill(Color.white)
                                                 .frame(height: 34)
                                             HStack {
-                                                LocationTextView(showAll: true, showNone: true, locations: $workItem.location)
+                                                LocationTextView(showAll: true, showNone: true, locations: $workItem.locations)
                                                     .font(.body)
                                                     .padding(.horizontal, 9)
                                                     .lineLimit(1)
@@ -151,7 +154,6 @@ struct AddEditWorkView: View {
                                         }.onTapGesture {
                                             showingLocationSheet.toggle()
                                         }
-//                                    }.buttonStyle(PlainButtonStyle())
                                 }
                             }.padding(.vertical)
 
@@ -167,13 +169,13 @@ struct AddEditWorkView: View {
                                         .fill(Color.white)
                                         .frame(height: 120)
                                     
-                                    if workItem.notes.isEmptyOrNil{
+                                    if workItem.notes == "" {
                                         Text("Any other notes or instructions?")
                                             .foregroundColor(Color(UIColor.placeholderText))
                                             .padding(7)
                                     }
                                     
-                                    TextEditor(text: $workItem.notes ?? "")
+                                    TextEditor(text: $workItem.notes)
                                         .padding(.horizontal, 2)
                                         .frame(height: 120)
 
@@ -185,7 +187,7 @@ struct AddEditWorkView: View {
                     }.padding()
                 }.navigationBarHidden(true)
                 .sheet(isPresented: $showingLocationSheet) {
-                    LocationSelectionView(selectedLocations: $workItem.location)
+                    LocationSelectionView(selectedLocations: $workItem.locations)
                 }
             }
         }

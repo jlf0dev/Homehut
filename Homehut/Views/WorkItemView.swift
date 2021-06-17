@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct WorkItemView: View {
-    @Binding var workItem: WorkItemModel
+    @ObservedObject var workItem: WorkItem
     
     @State var showOptions: Bool = false
     @State var navigationSelection: String? = nil
@@ -21,18 +21,17 @@ struct WorkItemView: View {
             
             ScrollView {
                 VStack(alignment: .center, spacing: 13){
-//                        Text("Work Item")
-//                            .font(.title)
-//                            .fontWeight(.bold)
-//                            .foregroundColor(Color("blackColor"))
+                    ZStack{
+                        Text("Work Item")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color("blackColor"))
                         
-                    BackOptionsBarView(showOptions: $showOptions)
+                        BackOptionsBarView(showOptions: $showOptions)
+                    }
                         
                     HStack() {
-//                        Text("Your Work Item")
-//                            .font(.subheadline)
-//                            .foregroundColor(Color("blackColor"))
-                        WorkCategoryIconView(category: $workItem.category)
+                        WorkCategoryIconView(category: workItem.category)
                             .frame(width: 50)
                     
                         Text(workItem.title)
@@ -49,7 +48,7 @@ struct WorkItemView: View {
                             .font(.subheadline)
                             .foregroundColor(Color("blackColor"))
                     
-                        Text("")
+                        Text(workItem.dueDate, style: .date)
                             .font(.title3)
                             .fontWeight(.bold)
                             .foregroundColor(Color("blackColor"))
@@ -76,14 +75,24 @@ struct WorkItemView: View {
                     )
                 }
             
-            NavigationLink(destination: AddEditWorkView($workItem), tag: "edit", selection: $navigationSelection) { EmptyView() }
+            NavigationLink(destination: AddEditWorkView(workItem), tag: "edit", selection: $navigationSelection) { EmptyView() }
         }.navigationBarHidden(true)
     }
 }
 
 struct WorkItemView_Previews: PreviewProvider {
-    @State static var workItem = WorkItemModel()
+    static var workItem = WorkItem(context: PersistenceController.preview.container.viewContext)
+    static var loc = Location(context: PersistenceController.preview.container.viewContext)
     static var previews: some View {
-        WorkItemView(workItem: $workItem)
+        WorkItemView(workItem: workItem)
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .onAppear(){
+                workItem.title = "Clean the bathroom"
+                workItem.dueDate = Date()
+                workItem.category = CategoryType.clean
+                workItem.frequency = FrequencyType.oneTime
+                loc.name = "Bathroom"
+                workItem.locations?.insert(loc)
+            }
     }
 }

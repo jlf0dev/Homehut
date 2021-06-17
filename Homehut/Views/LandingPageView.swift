@@ -8,10 +8,17 @@
 import SwiftUI
 
 struct LandingPageView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+    
     @StateObject private var viewModel = LandingPageViewModel()
     
     @State private var text = ""
     
+    @FetchRequest( entity: WorkItem.entity(),
+                   sortDescriptors: [NSSortDescriptor(key: "titleValue", ascending: true)],
+        animation: .default)
+    
+    private var workItems: FetchedResults<WorkItem>
     
     var body: some View {
         NavigationView {
@@ -49,7 +56,7 @@ struct LandingPageView: View {
                             .font(.title2)
                             .foregroundColor(Color("blackColor"))
 
-                        ForEach (previewData) { workItem in
+                        ForEach (workItems) { workItem in
                             WorkCardView(workItem: workItem) // PREVIEW DATA
                         }
                     }
@@ -152,6 +159,5 @@ struct HouseImageView: View {
     
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LandingPageView()
-    }
+        LandingPageView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)    }
 }

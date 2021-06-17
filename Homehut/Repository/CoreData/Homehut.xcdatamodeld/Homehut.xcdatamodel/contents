@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20F71" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Location" representedClassName="Location" syncable="YES">
+        <attribute name="nameValue" attributeType="String"/>
+        <relationship name="workItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WorkItem" inverseName="locationsValue" inverseEntity="WorkItem"/>
+    </entity>
+    <entity name="WorkItem" representedClassName="WorkItem" syncable="YES">
+        <attribute name="categoryValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="dueDateValue" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="frequencyValue" optional="YES" attributeType="String"/>
+        <attribute name="notesValue" optional="YES" attributeType="String"/>
+        <attribute name="titleValue" attributeType="String"/>
+        <relationship name="locationsValue" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Location" inverseName="workItem" inverseEntity="Location"/>
+    </entity>
+    <elements>
+        <element name="Location" positionX="-63" positionY="-18" width="128" height="73"/>
+        <element name="WorkItem" positionX="-54" positionY="0" width="128" height="119"/>
+    </elements>
+</model>

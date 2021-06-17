@@ -8,22 +8,41 @@
 import SwiftUI
 
 struct LocationSelectionView: View {
-    @Binding var selectedLocations: [Location]?
+    @Binding var selectedLocations: Set<Location>?
     
-    @State var locationList: [Location] = previewLocationData
     @State var editMode: EditMode = .inactive
     
+    @FetchRequest( entity: Location.entity(),
+                   sortDescriptors: [NSSortDescriptor(key: "nameValue", ascending: true)],
+        animation: .default)
+    private var locationList: FetchedResults<Location>
     
     var body: some View {
         NavigationView {
             ZStack{
                 Color(UIColor.MyTheme.lightGrey1)
                     .edgesIgnoringSafeArea(.all)
-                MultiSelectListView(items: $locationList, selections: $selectedLocations, deleteAction: deleteItem) { (item) in
-                    HStack {
-                        Text(item.name)
-                        Spacer()
+                List {
+                    ForEach(locationList) { location in
+                        HStack {
+                            Text(location.name)
+                            Spacer()
+                        }
+                            .modifier(CheckmarkModifier(checked: selectedLocations?.contains(location) ?? false))
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                if let sel = selectedLocations, sel.contains(location) {
+                                    selectedLocations?.remove(location)
+                                }
+                                else {
+                                    if selectedLocations == nil {
+                                        selectedLocations = Set<Location>()
+                                    }
+                                    selectedLocations?.insert(location)
+                                }
+                        }
                     }
+                    .onDelete (perform: deleteItem)
                 }
             }.navigationTitle("Locations")
             .toolbar {
@@ -49,10 +68,26 @@ struct LocationSelectionView: View {
     }
 }
 
+struct CheckmarkModifier: ViewModifier {
+    var checked: Bool = false
+    func body(content: Content) -> some View {
+        ZStack(alignment: .trailing) {
+            content
+            Image("checkmark")
+                .resizable()
+                .frame(width: 20, height: 20)
+                .foregroundColor(.green)
+                .shadow(radius: 1)
+                .opacity(checked ? 1 : 0)
+                .animation(nil)
+        }
+    }
+}
+
 struct LocationTextView: View {
     var showAll = false
     var showNone = false
-    @Binding var locations: [Location]?
+    @Binding var locations: Set<Location>?
     var body: Text {
         if let locs = locations, !locs.isEmpty {
             if (locs.count == 1){
@@ -80,10 +115,36 @@ struct LocationTextView: View {
 
 
 struct LocationSelectionView_Previews: PreviewProvider {
-    @State static var locationData: [Location]? = [
-        Location("Kitchen"),
-        Location("Bathroom")]
+//    @FetchRequest(
+//        entity: Location.entity(),
+//        sortDescriptors: [
+//            NSSortDescriptor(keyPath: \Location.name, ascending: true),
+//        ],
+//        predicate: NSPredicate(format: "name == %@", "Bathroom")
+//    ) static var bathroom: FetchedResults<Location>
+    
+//    static var bath: Location = Location(context: PersistenceController.preview.container.viewContext)
+//
+//    static var upstairs: Location = Location(context: PersistenceController.preview.container.viewContext)
+//
+//    static var downstairs: Location = Location(context: PersistenceController.preview.container.viewContext)
+//
+//    static var bedroom: Location = Location(context: PersistenceController.preview.container.viewContext)
+//
+    
+    @State static var locationPreviewSet: Set<Location>?
+
     static var previews: some View {
-        LocationSelectionView(selectedLocations: $locationData)
+        LocationSelectionView(selectedLocations: $locationPreviewSet)
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+//            .onAppear(){
+//                bedroom.name = "Bedroom"
+//                downstairs.name = "Downstairs"
+//                upstairs.name = "Upstairs"
+//                bath.name = "Bathroom"
+////                for bath in bathroom {
+////                locationPreviewSet?.insert(bathroom.first!)
+////                }
+//            }
     }
 }

@@ -27,6 +27,8 @@
 		B6D80AD42652B2C800AE8B4E /* WorkItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D80AD32652B2C800AE8B4E /* WorkItemViewModel.swift */; };
 		B6D80AD82652FD1300AE8B4E /* WorkCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D80AD72652FD1300AE8B4E /* WorkCardView.swift */; };
 		B6D80ADB2652FE4200AE8B4E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D80ADA2652FE4200AE8B4E /* Constants.swift */; };
+		B6FBAC1E2682567E00B497BD /* AlertControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FBAC1D2682567D00B497BD /* AlertControlView.swift */; };
+		B6FBAC202682B09D00B497BD /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FBAC1F2682B09D00B497BD /* Helpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		B6D80AD32652B2C800AE8B4E /* WorkItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkItemViewModel.swift; sourceTree = "<group>"; };
 		B6D80AD72652FD1300AE8B4E /* WorkCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkCardView.swift; sourceTree = "<group>"; };
 		B6D80ADA2652FE4200AE8B4E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		B6FBAC1D2682567D00B497BD /* AlertControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertControlView.swift; sourceTree = "<group>"; };
+		B6FBAC1F2682B09D00B497BD /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +126,7 @@
 				B6D80ACD264EEFE100AE8B4E /* LocationSelectionView.swift */,
 				B6D80AD126517AEC00AE8B4E /* WorkItemView.swift */,
 				B6D80AD72652FD1300AE8B4E /* WorkCardView.swift */,
+				B6FBAC1D2682567D00B497BD /* AlertControlView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -153,6 +158,7 @@
 			children = (
 				B66953962678E0230081B88C /* CoreData */,
 				B6D80ADA2652FE4200AE8B4E /* Constants.swift */,
+				B6FBAC1F2682B09D00B497BD /* Helpers.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -229,8 +235,10 @@
 				B6D80ACC264CD82800AE8B4E /* MultiSelectListView.swift in Sources */,
 				B6D80AD0264EF0B200AE8B4E /* AddWorkViewModel.swift in Sources */,
 				B6D80AD226517AEC00AE8B4E /* WorkItemView.swift in Sources */,
+				B6FBAC202682B09D00B497BD /* Helpers.swift in Sources */,
 				B669539B26798DBC0081B88C /* Location+CoreDataClass.swift in Sources */,
 				B66953952678DFE40081B88C /* Persistence.swift in Sources */,
+				B6FBAC1E2682567E00B497BD /* AlertControlView.swift in Sources */,
 				B6A9B6C82649B910009C4D4F /* LandingPageViewModel.swift in Sources */,
 				B6A9B6CC2649BA54009C4D4F /* AddEditWorkView.swift in Sources */,
 				B6A9B6CA2649B93F009C4D4F /* WorkItemModel.swift in Sources */,

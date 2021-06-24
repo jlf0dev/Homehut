@@ -44,5 +44,15 @@ public class WorkItem: NSManagedObject {
         set { locationsValue = newValue as NSSet?}
     }
     
+    convenience init(title: String = "", category: CategoryType = .general, dueDate: Date = Date(), frequency: FrequencyType = .oneTime, locations: Set<Location>? = nil, notes: String = "", insertIntoManagedObjectContext context: NSManagedObjectContext!) {
+        let entity = NSEntityDescription.entity(forEntityName: "WorkItem", in: context)!
+        self.init(entity: entity, insertInto: context)
+        self.title = title
+        self.category = category
+        self.dueDate = dueDate
+        self.frequency = frequency
+        self.locations = locations
+        self.notes = notes
+    }
 
 }

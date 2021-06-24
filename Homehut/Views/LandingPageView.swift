@@ -22,16 +22,15 @@ struct LandingPageView: View {
     
     var body: some View {
         NavigationView {
-            ZStack
+            ZStack (alignment: .topLeading)
             {
                 Color("backgroundColor")
                     .edgesIgnoringSafeArea(.all)
-                    
                 ScrollView {
                     VStack(alignment: .leading){
-                        AppBarView()
-                            
+    
                         HouseImageView()
+                            .padding(.top)
                         
                         VStack(alignment: .leading, spacing: 15) {
                             Text("Welcome back Jake")
@@ -60,9 +59,17 @@ struct LandingPageView: View {
                             WorkCardView(workItem: workItem) // PREVIEW DATA
                         }
                     }
+                    .padding()
                 }
-                .padding()
+                .padding(.top, 1)
+                
+                    
+                AppBarView()
+                    .environment(\.managedObjectContext, self.viewContext)
+                    .padding(.horizontal, 23)
+                    .padding(.top, 10)
             }
+            
             .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
             .navigationBarHidden(true)
         }
@@ -90,6 +97,7 @@ extension UIApplication: UIGestureRecognizerDelegate {
     
     
 struct AppBarView: View {
+    @Environment(\.managedObjectContext) private var viewContext
     let frameSize: CGFloat? = 45
     
     @State var navigateToAddWorkView = false
@@ -109,7 +117,7 @@ struct AppBarView: View {
             
             Spacer()
             
-            NavigationLink(destination: AddEditWorkView(), isActive: $navigateToAddWorkView) {
+            NavigationLink(destination: AddEditWorkView().environment(\.managedObjectContext, self.viewContext), isActive: $navigateToAddWorkView) {
                 Button(action: {
                     navigateToAddWorkView = true
                 }) {

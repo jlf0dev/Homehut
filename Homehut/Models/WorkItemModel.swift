@@ -41,10 +41,12 @@ import SwiftUI
 //    }
 //}
 
-enum CategoryType: Int {
+enum CategoryType: Int, CaseIterable {
     case general,
          clean,
-         repair
+         repair,
+         maintenance,
+         organize
     var label: String {
         return String(describing: self)
     }
@@ -60,6 +62,10 @@ extension CategoryType {
                 return Color.red
             case .repair:
                 return Color.orange
+            case .maintenance:
+                return Color.blue
+            case .organize:
+                return Color.green
             }
         }
     }
@@ -75,24 +81,6 @@ enum FrequencyType: String, Codable, CaseIterable, Identifiable {
          yearly = "Yearly"
 }
 
-extension Optional where Wrapped == String {
-    var _bound: String? {
-        get {
-            return self
-        }
-        set {
-            self = newValue
-        }
-    }
-    public var bound: String {
-        get {
-            return _bound ?? ""
-        }
-        set {
-            _bound = newValue.isEmpty ? nil : newValue
-        }
-    }
-}
 
 
 

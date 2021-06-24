@@ -18,6 +18,7 @@ struct PersistenceController {
         Location(context: viewContext).name = "Upstairs"
         Location(context: viewContext).name = "Downstairs"
         Location(context: viewContext).name = "Bedroom"
+        WorkItem(title: "Clean Bathroom", category: .repair, frequency: .monthly, insertIntoManagedObjectContext: viewContext)
         for _ in 0..<10 {
             let newWorkItem = WorkItem(context: viewContext)
             newWorkItem.title = "Example Title"

@@ -14,7 +14,7 @@ struct HomehutApp: App {
     var body: some Scene {
         WindowGroup {
             LandingPageView()
-                .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }

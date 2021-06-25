@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import SwiftUI
 
 @objc(WorkItem)
 public class WorkItem: NSManagedObject {
@@ -41,7 +42,16 @@ public class WorkItem: NSManagedObject {
     
     var locations: Set<Location>? {
         get { return locationsValue as? Set<Location> }
-        set { locationsValue = newValue as NSSet?}
+        set { locationsValue = newValue as NSSet? }
+    }
+    
+    var images: Set<WorkImage>? {
+        get { return imagesValue as? Set<WorkImage> }
+        set { imagesValue = newValue as NSSet? }
+    }
+    
+    var uiImageArray: [UIImage]? {
+        get { return images?.sorted(by: {$0.order < $1.order}).map { $0.image } }
     }
     
     convenience init(title: String = "", category: CategoryType = .general, dueDate: Date = Date(), frequency: FrequencyType = .oneTime, locations: Set<Location>? = nil, notes: String = "", insertIntoManagedObjectContext context: NSManagedObjectContext!) {

@@ -4,16 +4,23 @@
         <attribute name="nameValue" attributeType="String"/>
         <relationship name="workItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WorkItem" inverseName="locationsValue" inverseEntity="WorkItem"/>
     </entity>
+    <entity name="WorkImage" representedClassName="WorkImage" syncable="YES">
+        <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="order" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="workItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WorkItem" inverseName="imagesValue" inverseEntity="WorkItem"/>
+    </entity>
     <entity name="WorkItem" representedClassName="WorkItem" syncable="YES">
         <attribute name="categoryValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="dueDateValue" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="frequencyValue" optional="YES" attributeType="String"/>
         <attribute name="notesValue" optional="YES" attributeType="String"/>
         <attribute name="titleValue" attributeType="String"/>
+        <relationship name="imagesValue" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WorkImage" inverseName="workItem" inverseEntity="WorkImage"/>
         <relationship name="locationsValue" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Location" inverseName="workItem" inverseEntity="Location"/>
     </entity>
     <elements>
         <element name="Location" positionX="-63" positionY="-18" width="128" height="73"/>
-        <element name="WorkItem" positionX="-54" positionY="0" width="128" height="119"/>
+        <element name="WorkItem" positionX="-54" positionY="0" width="128" height="134"/>
+        <element name="WorkImage" positionX="-63" positionY="45" width="128" height="74"/>
     </elements>
 </model>

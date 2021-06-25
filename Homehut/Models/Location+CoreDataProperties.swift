@@ -2,7 +2,7 @@
 //  Location+CoreDataProperties.swift
 //  Homehut
 //
-//  Created by Jacob Fink on 6/15/21.
+//  Created by Jacob Fink on 6/24/21.
 //
 //
 

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct AddEditWorkView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -36,28 +37,35 @@ struct AddEditWorkView: View {
     }
     
     private struct EditWorkView: View {
-        @Environment(\.managedObjectContext) private var viewContext
         @Environment(\.presentationMode) var presentationMode
+        @Environment(\.managedObjectContext) private var viewContext
+        
         
         var workItem: WorkItem? = nil
-        
         private var addEditTitle: String
+        private var originalImageArray: [UIImage]?
+        
         @State private var showingLocationSheet = false
         @State private var title: String
         @State private var category: CategoryType
         @State private var dueDate: Date
         @State private var frequency: FrequencyType
         @State private var locations: Set<Location>?
+        @State private var images: [UIImage]?
         @State private var notes: String
+        @State private var showingImagePicker: Bool = false
+        @State private var selectedImage: UIImage? = nil
+        @State private var tappedImage: UIImage? = nil
         private var dismissConfirmation: Binding<Bool> { Binding (
             get: {
                 if let wi = workItem {
-                    if title == wi.title
-                        && category == wi.category
-                        && dueDate.toString() == wi.dueDate.toString()
-                        && frequency == wi.frequency
-                        && locations == wi.locations
-                        && notes == wi.notes {
+                    if title == wi.title,
+                       category == wi.category,
+                       dueDate.toString() == wi.dueDate.toString(),
+                       frequency == wi.frequency,
+                       locations == wi.locations,
+                       images == originalImageArray,
+                       notes == wi.notes {
                         return false
                     }
                     else { return true }
@@ -67,6 +75,7 @@ struct AddEditWorkView: View {
                        dueDate.toString() == Date().toString(),
                        frequency == .oneTime,
                        locations == nil,
+                       images == nil,
                        notes == "" {
                         return false
                     }
@@ -77,15 +86,18 @@ struct AddEditWorkView: View {
             set: { _ in}
             )
         }
+
         
         init (workItem: WorkItem) {
             self.addEditTitle = "Edit"
             self.workItem = workItem
+            originalImageArray = workItem.uiImageArray ?? [UIImage]()
             _title = State(initialValue: workItem.title)
             _category = State(initialValue: workItem.category)
             _dueDate = State(initialValue: workItem.dueDate)
             _frequency = State(initialValue: workItem.frequency)
             _locations = State(initialValue: workItem.locations)
+            _images = State(initialValue: originalImageArray)
             _notes = State(initialValue: workItem.notes)
         }
         
@@ -96,6 +108,7 @@ struct AddEditWorkView: View {
             _dueDate = State(initialValue: Date())
             _frequency = State(initialValue: .oneTime)
             _locations = State(initialValue: nil)
+            _images = State(initialValue: nil)
             _notes = State(initialValue: "")
         }
         
@@ -117,6 +130,23 @@ struct AddEditWorkView: View {
             newWorkItem.locations = self.locations
             newWorkItem.notes = self.notes
             
+            if let images = self.images {
+                if let oldImages = newWorkItem.images {
+                    for image in oldImages {
+                        newWorkItem.removeFromImagesValue(image)
+                    }
+                }
+                var order: Int16 = 1
+                for image in images {
+                    let newWorkImage = WorkImage(context: viewContext)
+                    newWorkImage.image = image
+                    newWorkImage.order = order
+                    newWorkItem.addToImagesValue(newWorkImage)
+                    order+=1
+                }
+            }
+            
+            
             do {
                 try viewContext.save()
             } catch {
@@ -129,10 +159,28 @@ struct AddEditWorkView: View {
             self.presentationMode.wrappedValue.dismiss()
         }
         
+        func loadNewImage() {
+            guard let selectedImage = selectedImage else { return }
+            if images == nil {
+                images = [UIImage]()
+            }
+            
+            if tappedImage != nil {
+                let index = images!.firstIndex(where: { $0 == tappedImage })
+                images![index!] = selectedImage
+                    
+            }
+            else {
+                images!.append(selectedImage)
+            }
+            
+            
+        }
+        
 
         var body: some View {
             ZStack{
-                Color(UIColor.MyTheme.lightGrey1)
+                Color("backgroundColor")
                     .edgesIgnoringSafeArea(.all)
                         
                     ScrollView {
@@ -155,30 +203,7 @@ struct AddEditWorkView: View {
                                     .padding(.vertical)
                                 
                                 
-                                VStack(alignment: .leading) {
-                                    Text("Category")
-                                        .font(.title2)
-                                        .foregroundColor(Color("blackColor"))
-                                    HStack {
-                                        ForEach (CategoryType.allCases, id:\.self) { currentCat in
-                                            VStack {
-                                                WorkCategoryIconView(category: currentCat)
-                                                    .frame(width: 50)
-                                                    
-                                                Spacer()
-                                            }
-                                            .frame(maxWidth: .infinity, minHeight: 80)
-                                            .modifier(CheckmarkModifier(checked: category == currentCat ? true : false, alignment: .bottom))
-                                            .contentShape(Rectangle())
-                                            .onTapGesture {
-                                                category = currentCat
-                                            }
-                                            
-                                        }
-                                    }
-                                    .padding([.top, .horizontal])
-                                }
-                                .padding(.top)
+                                CategoryView(category: $category)
                                 
                                 
                                 DateFrequencyView(dueDate: $dueDate, frequency: $frequency)
@@ -187,7 +212,11 @@ struct AddEditWorkView: View {
                                 
                                 LocationPickerView(showingLocationSheet: $showingLocationSheet, locations: $locations)
                                     .padding(.vertical)
-                                   
+                                    .sheet(isPresented: $showingLocationSheet) { LocationSelectionView(selectedLocations: $locations) }
+                                
+                                PicturePickerView(images: $images, showingImagePicker: $showingImagePicker, selectedImage: $selectedImage, tappedImage: $tappedImage)
+                                    .padding(.vertical)
+                                    .sheet(isPresented: $showingImagePicker, onDismiss: loadNewImage) { ImagePicker(image: $selectedImage) }
                                 
                                 NotesView(notes: $notes, scroll: scroll)
                                     .padding(.vertical)
@@ -211,12 +240,12 @@ struct AddEditWorkView: View {
                                     
                                 }.padding(.vertical)
                             }.padding()
-                        }.padding(.top, 1)
-                    }
+                        }
+                    }.padding(.top, 1)
+//                    .sheet(isPresented: $showingLocationSheet) { LocationSelectionView(selectedLocations: $locations) }
+//                    .sheet(isPresented: $showingImagePicker, onDismiss: loadNewImage) { ImagePicker(image: $selectedImage) }
                 }.navigationBarHidden(true)
-                .sheet(isPresented: $showingLocationSheet) {
-                    LocationSelectionView(selectedLocations: $locations)
-                }
+                
             }
     }
 }
@@ -237,6 +266,37 @@ struct TitleEntryView: View {
                 .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
             
         }
+    }
+}
+
+struct CategoryView: View {
+    @Binding var category: CategoryType
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Category")
+                .font(.title2)
+                .foregroundColor(Color("blackColor"))
+            HStack {
+                ForEach (CategoryType.allCases, id:\.self) { currentCat in
+                    VStack {
+                        WorkCategoryIconView(category: currentCat)
+                            .frame(width: 50)
+                        
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 80, maxHeight: 80)
+                    .modifier(CheckmarkModifier(checked: category == currentCat ? true : false, alignment: .bottom))
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        category = currentCat
+                    }
+                    
+                }
+            }
+            .padding([.top, .horizontal])
+        }
+        .padding(.top)
     }
 }
 
@@ -459,6 +519,95 @@ struct BackOptionsBarView: View {
                     .background(Color.white)
                     .cornerRadius(10.0)
             }
+        }
+    }
+}
+
+
+
+struct PicturePickerView: View {
+    @Binding var images: [UIImage]?
+    @Binding var showingImagePicker: Bool
+    @Binding var selectedImage: UIImage?
+    @Binding var tappedImage: UIImage?
+    
+    let imageFrameSize: CGFloat? = 75
+    let placeholderFrameSize: CGFloat? = 75
+    let xIconFrameSize: CGFloat? = 50
+    
+    
+    
+    struct imageRow: View {
+        @Binding var images: [UIImage]?
+        @Binding var tappedImage: UIImage?
+        @Binding var selectedImage: UIImage?
+        @Binding var showingImagePicker: Bool
+        
+        let imageFrameSize: CGFloat?
+        let placeholderFrameSize: CGFloat?
+        let xIconFrameSize: CGFloat?
+        
+        let firstIndex: Int
+        let lastIndex: Int
+        
+        
+        
+        var body: some View {
+            HStack (alignment: .top) {
+                if let imgs = images, !imgs.isEmpty {
+                    ForEach(imgs.dropFirst(firstIndex).prefix(lastIndex), id: \.self) { img in
+                        ZStack(alignment: .topLeading) {
+                            Image(uiImage: img)
+                                .resizable()
+                                .renderingMode(.original)
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: imageFrameSize)
+                                .onTapGesture {
+                                    tappedImage = img
+                                    selectedImage = nil
+                                    showingImagePicker = true
+                                }
+                            
+                            Button(action: { images!.removeAll(where: {$0 == img}) }) {
+                            Image("xIcon")
+                                .resizable()
+                                .renderingMode(.original)
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: xIconFrameSize)
+                                .offset(x: -(xIconFrameSize! / 2), y: -(xIconFrameSize! / 2))
+                            }
+                        }
+                        .padding()
+                    }
+                }
+                if images == nil || images!.count < lastIndex {
+                    Button(action: {
+                        tappedImage = nil
+                        selectedImage = nil
+                        showingImagePicker = true
+                    }) {
+                    Image("imagePlaceholder")
+                        .resizable()
+                        .renderingMode(.original)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: placeholderFrameSize)
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Pictures")
+                .font(.title2)
+                .foregroundColor(Color("blackColor"))
+            imageRow(images: self.$images, tappedImage: $tappedImage, selectedImage: $selectedImage, showingImagePicker: $showingImagePicker, imageFrameSize: imageFrameSize, placeholderFrameSize: placeholderFrameSize, xIconFrameSize: xIconFrameSize, firstIndex: 0, lastIndex: 3)
+            if let imgs = images, imgs.count >= 3 {
+                imageRow(images: self.$images, tappedImage: $tappedImage, selectedImage: $selectedImage, showingImagePicker: $showingImagePicker, imageFrameSize: imageFrameSize, placeholderFrameSize: placeholderFrameSize, xIconFrameSize: xIconFrameSize, firstIndex: 3, lastIndex: 6)
+            }
+            
         }
     }
 }

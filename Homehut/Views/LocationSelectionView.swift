@@ -116,10 +116,9 @@ struct CheckmarkModifier: ViewModifier {
     func body(content: Content) -> some View {
         ZStack(alignment: alignment) {
             content
-            Image("checkmark")
+            Image(systemName: "checkmark")
                 .resizable()
-                .frame(width: 20, height: 20)
-                .foregroundColor(.green)
+                .frame(width: 15, height: 15)
                 .shadow(radius: 1)
                 .opacity(checked ? 1 : 0)
                 .animation(nil)

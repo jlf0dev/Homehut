@@ -16,16 +16,15 @@ struct WorkItemView: View {
     var body: some View {
         ZStack
         {
-            Color(UIColor.MyTheme.lightGrey1)
+            Color(UIColor.systemGroupedBackground)
                 .edgesIgnoringSafeArea(.all)
             
             ScrollView {
                 VStack(alignment: .center, spacing: 13){
                     ZStack{
-                        Text("Work Item")
+                        Text("Reminder")
                             .font(.title)
                             .fontWeight(.bold)
-                            .foregroundColor(Color("blackColor"))
                         
                         BackOptionsBarView(showOptions: $showOptions)
                     }
@@ -37,7 +36,6 @@ struct WorkItemView: View {
                         Text(workItem.title)
                             .font(.title)
                             .fontWeight(.bold)
-                            .foregroundColor(Color("blackColor"))
                             .multilineTextAlignment(.center)
                     }
 
@@ -46,12 +44,10 @@ struct WorkItemView: View {
                     VStack(alignment: .leading, spacing: 5) {
                         Text("Due")
                             .font(.subheadline)
-                            .foregroundColor(Color("blackColor"))
                     
                         Text(workItem.dueDate, style: .date)
                             .font(.title3)
                             .fontWeight(.bold)
-                            .foregroundColor(Color("blackColor"))
                             .multilineTextAlignment(.center)
                     }
                     

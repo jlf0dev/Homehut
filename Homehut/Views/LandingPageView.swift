@@ -24,7 +24,7 @@ struct LandingPageView: View {
         NavigationView {
             ZStack (alignment: .topLeading)
             {
-                Color("backgroundColor")
+                Color(UIColor.systemGroupedBackground)
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
                     VStack(alignment: .leading){
@@ -35,25 +35,43 @@ struct LandingPageView: View {
                         VStack(alignment: .leading, spacing: 15) {
                             Text("Welcome back Jake")
                                 .font(.subheadline)
-                                .foregroundColor(Color("blackColor"))
                             
                             Text("Organization is a journey, not a destination")
                                 .font(.title)
                                 .fontWeight(.bold)
-                                .foregroundColor(Color("blackColor"))
                                 .fixedSize(horizontal: false, vertical: true)
                             
-                            VStack {
-                                TextField("Search for work", text: $text)
-                                        .padding(8)
-                                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
-                            }.padding(.vertical)
+
                             
-                        }
+                        }.padding(.vertical)
                         
-                        Text("Your work items")
+                        Text("Your reminders")
                             .font(.title2)
-                            .foregroundColor(Color("blackColor"))
+                        VStack {
+                            TextField("Search", text: $text)
+                                    .padding(8)
+                                .padding(.horizontal, 25)
+                                .background(RoundedRectangle(cornerRadius: 10)
+                                                .fill(Color(UIColor.quaternarySystemFill)))
+                                .overlay(
+                                    HStack {
+                                        Image(systemName: "magnifyingglass")
+                                            .foregroundColor(.gray)
+                                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                            .padding(.leading, 8)
+                                 
+//                                        if isEditing {
+//                                            Button(action: {
+//                                                self.text = ""
+//                                            }) {
+//                                                Image(systemName: "multiply.circle.fill")
+//                                                    .foregroundColor(.gray)
+//                                                    .padding(.trailing, 8)
+//                                            }
+//                                        }
+                                    }
+                                )
+                        }.padding(.bottom)
 
                         ForEach (workItems) { workItem in
                             WorkCardView(workItem: workItem) // PREVIEW DATA
@@ -95,45 +113,6 @@ extension UIApplication: UIGestureRecognizerDelegate {
     }
 }
     
-    
-struct AppBarView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    let frameSize: CGFloat? = 45
-    
-    @State var navigateToAddWorkView = false
-    
-    var body: some View {
-        HStack{
-            
-            Button(action: {}) {
-                Image("profile")
-                    .resizable()
-                    .renderingMode(.original)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: frameSize)
-                    .background(Color.white)
-                    .cornerRadius(10.0)
-            }
-            
-            Spacer()
-            
-            NavigationLink(destination: AddEditWorkView().environment(\.managedObjectContext, self.viewContext), isActive: $navigateToAddWorkView) {
-                Button(action: {
-                    navigateToAddWorkView = true
-                }) {
-                    Image("addIcon")
-                        .resizable()
-                        .renderingMode(.original)
-                        .aspectRatio(contentMode: .fit)
-                        .padding(8)
-                        .frame(width: frameSize)
-                        .background(Color.white)
-                        .cornerRadius(10.0)
-                }
-            }
-        }
-    }
-}
 
 struct HouseImageView: View {
     var body: some View {
@@ -141,7 +120,7 @@ struct HouseImageView: View {
             VStack{
                 Image("houseLandingPage")
                     .resizable()
-                    .renderingMode(.original)
+//                    .renderingMode(.original)
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 150)
                     .padding()
@@ -160,12 +139,12 @@ struct HouseImageView: View {
     }
 }
 
-    
-    
-    
-    
-    
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LandingPageView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)    }
+        ForEach(ColorScheme.allCases, id: \.self) {
+            LandingPageView().preferredColorScheme($0)
+                .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        }
+    }
 }

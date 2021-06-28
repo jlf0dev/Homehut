@@ -27,13 +27,13 @@ extension CategoryType {
             case .general:
                 return Color.black
             case .clean:
-                return Color.red
+                return Color(UIColor.systemRed)
             case .repair:
-                return Color.orange
+                return Color(UIColor.systemOrange)
             case .maintenance:
-                return Color.blue
+                return Color(UIColor.systemBlue)
             case .organize:
-                return Color.green
+                return Color(UIColor.systemGreen)
             }
         }
     }

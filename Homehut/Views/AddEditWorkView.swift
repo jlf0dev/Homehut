@@ -39,6 +39,7 @@ struct AddEditWorkView: View {
     private struct EditWorkView: View {
         @Environment(\.presentationMode) var presentationMode
         @Environment(\.managedObjectContext) private var viewContext
+        @Environment(\.colorScheme) var currentColorScheme
         
         
         var workItem: WorkItem? = nil
@@ -180,16 +181,15 @@ struct AddEditWorkView: View {
 
         var body: some View {
             ZStack{
-                Color("backgroundColor")
+                Color(UIColor.systemGroupedBackground)
                     .edgesIgnoringSafeArea(.all)
                         
                     ScrollView {
                         ScrollViewReader { scroll in
                             ZStack{
-                                Text("\(addEditTitle) Work Item")
+                                Text("\(addEditTitle) Reminder")
                                     .font(.title)
                                     .fontWeight(.bold)
-                                    .foregroundColor(Color("blackColor"))
                                 
                                 BackBarView(showDismissConfirmation: dismissConfirmation)
                             }
@@ -233,8 +233,8 @@ struct AddEditWorkView: View {
                                             .contentShape(Rectangle())
                                     }
                                     .padding()
-                                    .foregroundColor(.white)
-                                    .background(title == "" ? Color(.systemGray5) : Color("blackColor"))
+                                    .foregroundColor(currentColorScheme == .light ? .white : .black)
+                                    .background(title == "" ? Color(.systemGray5) : Color(UIColor.label))
                                     .cornerRadius(40)
                                     .disabled(title == "")
                                     
@@ -242,8 +242,6 @@ struct AddEditWorkView: View {
                             }.padding()
                         }
                     }.padding(.top, 1)
-//                    .sheet(isPresented: $showingLocationSheet) { LocationSelectionView(selectedLocations: $locations) }
-//                    .sheet(isPresented: $showingImagePicker, onDismiss: loadNewImage) { ImagePicker(image: $selectedImage) }
                 }.navigationBarHidden(true)
                 
             }
@@ -260,10 +258,9 @@ struct TitleEntryView: View {
         VStack(alignment: .leading) {
             Text("Title")
                 .font(.title2)
-                .foregroundColor(Color("blackColor"))
             TextField("What do you need to do?", text: $title)
                 .padding(8)
-                .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color(UIColor.quaternarySystemFill)))
             
         }
     }
@@ -276,7 +273,6 @@ struct CategoryView: View {
         VStack(alignment: .leading) {
             Text("Category")
                 .font(.title2)
-                .foregroundColor(Color("blackColor"))
             HStack {
                 ForEach (CategoryType.allCases, id:\.self) { currentCat in
                     VStack {
@@ -312,7 +308,6 @@ struct DateFrequencyView: View {
                 VStack(alignment: .center){
                     Text("Date")
                         .font(.title2)
-                        .foregroundColor(Color("blackColor"))
                     
                     ZStack {
                         Text(dueDate, style: .date)
@@ -326,7 +321,6 @@ struct DateFrequencyView: View {
                             .labelsHidden()
                             .allowsHitTesting(true)
                             .background(Color.clear)
-                            .accentColor(Color("blackColor"))
                             .opacity(0.1)
                         
                     }
@@ -336,7 +330,6 @@ struct DateFrequencyView: View {
                 VStack(alignment: .center, spacing: 16){
                     Text("Frequency")
                         .font(.title2)
-                        .foregroundColor(Color("blackColor"))
                     
                     Picker(frequency.rawValue, selection: $frequency) {
                         ForEach(FrequencyType.allCases) { freq in
@@ -367,13 +360,12 @@ struct LocationPickerView: View {
         VStack(alignment: .leading){
             Text("Locations")
                 .font(.title2)
-                .foregroundColor(Color("blackColor"))
             HStack(){
                 
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.white)
+                        .fill(Color(UIColor.secondarySystemGroupedBackground))
                         .frame(height: 34)
                     HStack {
                         LocationTextView(showAll: true, showNone: true, locations: $locations)
@@ -382,12 +374,11 @@ struct LocationPickerView: View {
                             .lineLimit(1)
                         
                         Spacer()
-                        Image("arrowRight")
+                        Image(systemName: "chevron.right")
                             .resizable()
-                            .renderingMode(.original)
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 15, height: 20)
-                            .padding(.trailing, 2)
+                            .frame(height: 15)
+                            .offset(x: -8)
                     }
                 }.onTapGesture {
                     showingLocationSheet.toggle()
@@ -396,134 +387,6 @@ struct LocationPickerView: View {
         }
     }
 }
-
-struct NotesView: View {
-    @Binding var notes: String
-    var scroll: ScrollViewProxy
-    
-    var body: some View {
-        VStack(alignment: .leading){
-            Text("Notes")
-                .font(.title2)
-                .foregroundColor(Color("blackColor"))
-            
-            
-            ZStack(alignment: .topLeading) {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.white)
-                    .frame(height: 120)
-                
-                if notes == "" {
-                    Text("Any other notes or instructions?")
-                        .foregroundColor(Color(UIColor.placeholderText))
-                        .padding(7)
-                }
-                
-                TextEditor(text: $notes)
-                    .padding(.horizontal, 2)
-                    .frame(height: 120)
-                    .id(1)
-                    
-                
-            }
-            .onTapGesture {
-                DispatchQueue.main.async {
-                    withAnimation(.linear){
-                        scroll.scrollTo(1, anchor: .center)
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-struct AddWorkView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            AddEditWorkView()
-        }
-    }
-}
-
-struct BackBarView: View {
-    let frameSize: CGFloat? = 45
-    @Binding var showDismissConfirmation: Bool
-    @State private var showingAlert = false
-    @Environment(\.presentationMode) var presentationMode
-    
-    
-    var body: some View {
-        HStack{
-            Button(action:
-                    {
-                        if showDismissConfirmation {
-                            showingAlert = true
-                        }
-                        else {
-                            self.presentationMode.wrappedValue.dismiss()
-                        }
-                    }) {
-                Image("backArrowLeft")
-                    .resizable()
-                    .renderingMode(.original)
-                    .aspectRatio(contentMode: .fit)
-                    .padding(7)
-                    .frame(width: frameSize)
-                    .background(Color.white)
-                    .cornerRadius(10.0)
-            }
-            Spacer()
-        }
-        .alert(isPresented:$showingAlert) {
-            Alert(
-                title: Text("Leave without saving?"),
-                message: Text("You will lose all changes"),
-                primaryButton: .destructive(Text("Leave")) {
-                    self.presentationMode.wrappedValue.dismiss()
-                },
-                secondaryButton: .cancel()
-            )
-        }
-    }
-}
-
-
-struct BackOptionsBarView: View {
-    let frameSize: CGFloat? = 45
-    @Environment(\.presentationMode) var presentationMode
-    @Binding var showOptions: Bool
-    
-    
-    var body: some View {
-        HStack{
-            Button(action: { self.presentationMode.wrappedValue.dismiss() }) {
-                Image("backArrowLeft")
-                    .resizable()
-                    .renderingMode(.original)
-                    .aspectRatio(contentMode: .fit)
-                    .padding(7)
-                    .frame(width: frameSize)
-                    .background(Color.white)
-                    .cornerRadius(10.0)
-            }
-            Spacer()
-            
-            Button(action: { showOptions = true }) {
-                Image("options")
-                    .resizable()
-                    .renderingMode(.original)
-                    .aspectRatio(contentMode: .fit)
-                    .padding(8)
-                    .frame(width: frameSize)
-                    .background(Color.white)
-                    .cornerRadius(10.0)
-            }
-        }
-    }
-}
-
-
 
 struct PicturePickerView: View {
     @Binding var images: [UIImage]?
@@ -538,6 +401,8 @@ struct PicturePickerView: View {
     
     
     struct imageRow: View {
+        @Environment(\.colorScheme) var currentColorScheme
+        
         @Binding var images: [UIImage]?
         @Binding var tappedImage: UIImage?
         @Binding var selectedImage: UIImage?
@@ -569,12 +434,13 @@ struct PicturePickerView: View {
                                 }
                             
                             Button(action: { images!.removeAll(where: {$0 == img}) }) {
-                            Image("xIcon")
-                                .resizable()
-                                .renderingMode(.original)
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: xIconFrameSize)
-                                .offset(x: -(xIconFrameSize! / 2), y: -(xIconFrameSize! / 2))
+                                Image(currentColorScheme == .light ? "xIconLight" : "xIconDark")
+                                    .resizable()
+                                    .renderingMode(.original)
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: xIconFrameSize)
+                                    .offset(x: -(xIconFrameSize! / 2), y: -(xIconFrameSize! / 2))
+                                    .foregroundColor(Color(UIColor.label))
                             }
                         }
                         .padding()
@@ -588,9 +454,9 @@ struct PicturePickerView: View {
                     }) {
                     Image("imagePlaceholder")
                         .resizable()
-                        .renderingMode(.original)
                         .aspectRatio(contentMode: .fit)
                         .frame(width: placeholderFrameSize)
+                        .accentColor(Color(UIColor.label))
                     }
                 }
             }
@@ -602,12 +468,61 @@ struct PicturePickerView: View {
         VStack(alignment: .leading) {
             Text("Pictures")
                 .font(.title2)
-                .foregroundColor(Color("blackColor"))
+            
             imageRow(images: self.$images, tappedImage: $tappedImage, selectedImage: $selectedImage, showingImagePicker: $showingImagePicker, imageFrameSize: imageFrameSize, placeholderFrameSize: placeholderFrameSize, xIconFrameSize: xIconFrameSize, firstIndex: 0, lastIndex: 3)
             if let imgs = images, imgs.count >= 3 {
                 imageRow(images: self.$images, tappedImage: $tappedImage, selectedImage: $selectedImage, showingImagePicker: $showingImagePicker, imageFrameSize: imageFrameSize, placeholderFrameSize: placeholderFrameSize, xIconFrameSize: xIconFrameSize, firstIndex: 3, lastIndex: 6)
             }
             
+        }
+    }
+}
+
+struct NotesView: View {
+    @Binding var notes: String
+    var scroll: ScrollViewProxy
+    
+    var body: some View {
+        VStack(alignment: .leading){
+            Text("Notes")
+                .font(.title2)
+            
+            
+            ZStack(alignment: .topLeading) {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(UIColor.quaternarySystemFill))
+                    .frame(height: 120)
+                
+                if notes == "" {
+                    Text("Any other notes or instructions?")
+                        .foregroundColor(Color(UIColor.placeholderText))
+                        .padding(7)
+                }
+                
+                TextEditor(text: $notes)
+                    .padding(.horizontal, 2)
+                    .frame(height: 120)
+                    .id(1)
+                    
+                
+            }
+            .onTapGesture {
+                DispatchQueue.main.async {
+                    withAnimation(.linear){
+                        scroll.scrollTo(1, anchor: .center)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+struct AddWorkView_Previews: PreviewProvider {
+    static var previews: some View {
+        ForEach(ColorScheme.allCases, id: \.self) {
+            AddEditWorkView().preferredColorScheme($0)
+                .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         }
     }
 }

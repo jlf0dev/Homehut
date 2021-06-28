@@ -20,32 +20,33 @@ struct WorkCardView: View {
                 VStack(alignment: .leading){
                     LocationTextView(locations: $workItem.locations)
                             .font(.caption.weight(.medium))
-                            .foregroundColor(Color("grayColor"))
+                        .foregroundColor(Color(UIColor.secondaryLabel))
                     
                     Text(workItem.title)
                         .lineLimit(1)
                         .font(.headline)
-                        .foregroundColor(Color("blackColor"))
+                        .foregroundColor(Color(UIColor.label))
                     Group {
                         Text("Due ")
                         + Text(workItem.dueDate, style: .date)
                     }
                     .font(.footnote)
-                    .foregroundColor(Color("blackColor"))
+                    .foregroundColor(Color(UIColor.label))
                     
                 }
                 Spacer()
                 
-                Image("arrowRight")
+                Image(systemName: "chevron.right")
                     .resizable()
-                    .renderingMode(.original)
+//                    .renderingMode(.original)
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 15)
-                    .offset(x: 6)
+                    .frame(height: 15)
+                    .foregroundColor(Color(UIColor.label))
+//                    .offset(x: 6)
             }
             .padding()
             .frame(maxWidth: .infinity)
-            .background(Color.white)
+            .background(Color(UIColor.secondarySystemGroupedBackground))
             .cornerRadius(18.0)
             .onTapGesture {
                 navigateToWorkItemView = true
@@ -90,5 +91,6 @@ struct WorkCardView_Previews: PreviewProvider {
                 loc.name = "Bathroom"
                 workItem.locations?.insert(loc)
             }
+            .colorScheme(.dark)
     }
 }

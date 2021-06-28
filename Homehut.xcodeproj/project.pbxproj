@@ -31,6 +31,7 @@
 		B6FBAC342685179100B497BD /* WorkItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FBAC302685179100B497BD /* WorkItem+CoreDataProperties.swift */; };
 		B6FBAC352685179100B497BD /* WorkImage+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FBAC312685179100B497BD /* WorkImage+CoreDataClass.swift */; };
 		B6FBAC362685179100B497BD /* WorkImage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FBAC322685179100B497BD /* WorkImage+CoreDataProperties.swift */; };
+		B6FBAC3D26894F7500B497BD /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FBAC3C26894F7500B497BD /* NavigationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		B6FBAC302685179100B497BD /* WorkItem+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B6FBAC312685179100B497BD /* WorkImage+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkImage+CoreDataClass.swift"; sourceTree = "<group>"; };
 		B6FBAC322685179100B497BD /* WorkImage+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkImage+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		B6FBAC3C26894F7500B497BD /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +175,7 @@
 				B6D80AD72652FD1300AE8B4E /* WorkCardView.swift */,
 				B6FBAC1D2682567D00B497BD /* AlertControlView.swift */,
 				B6FBAC212684BD8900B497BD /* ImagePickerView.swift */,
+				B6FBAC3C26894F7500B497BD /* NavigationView.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 				B6A9B6CC2649BA54009C4D4F /* AddEditWorkView.swift in Sources */,
 				B6A9B6CA2649B93F009C4D4F /* AdditionalModels.swift in Sources */,
 				B6FBAC2E2685166500B497BD /* Location+CoreDataProperties.swift in Sources */,
+				B6FBAC3D26894F7500B497BD /* NavigationView.swift in Sources */,
 				B6D80AD82652FD1300AE8B4E /* WorkCardView.swift in Sources */,
 				B6FBAC362685179100B497BD /* WorkImage+CoreDataProperties.swift in Sources */,
 				B66953932677BAA90081B88C /* Homehut.xcdatamodeld in Sources */,
